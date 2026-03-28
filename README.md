@@ -1,13 +1,21 @@
 # 🎧 SonarMute Automator (SteelSeries Sonar Fix)
 
-A lightweight Python-based automation tool designed for **SteelSeries Sonar** users. It solves the common issue of Discord audio leaking into multiple virtual channels (e.g., Gaming and Microphone) by automatically muting specific applications on designated channels upon Windows startup.
+A lightweight Python-based automation tool designed for **SteelSeries Sonar** users. 
+
+### 💡 The Problem
+SteelSeries Sonar has a known issue where audio routing becomes "leaky" during screen sharing or streaming (e.g., on Discord). Other participants often hear their own voices echoed back or hear system sounds that should be isolated. This happens because Sonar fails to properly separate audio streams across virtual channels like *Gaming* and *Microphone* during active sessions.
+
+### ✅ The Solution
+**SonarMute Automator** solves this by automatically muting specific applications on designated virtual channels upon Windows startup. It ensures that apps like Discord remain silent on channels where they would otherwise cause feedback loops, effectively killing the echo once and for all.
+
+---
 
 ## ✨ Features
 
 * **Smart Device Selector:** Automatically lists all active audio devices and identifies applications currently using audio via an interactive terminal menu.
-* **Precision Muting:** Instead of muting the entire system, it targets a specific application on a specific virtual channel (e.g., muting Discord only on the 'Microphone' channel).
+* **Precision Muting:** Targets a specific application on a specific virtual channel (e.g., muting Discord only on the 'Microphone' channel).
 * **Ghost-Mode Execution:** Runs invisibly in the background without a console window.
-* **Cursor-Safe Automation:** Specifically engineered to prevent the Windows "Loading" (blue circle) cursor from appearing during execution cycle.
+* **Cursor-Safe Automation:** Specifically engineered to prevent the Windows "Loading" (blue circle) cursor from appearing during execution.
 * **Zero-Footprint:** Executes the command once and terminates immediately, leaving **0% CPU and RAM usage** after the task is done.
 * **Auto-Installer:** Handles all Python dependencies and installs `NirCmd` automatically if missing.
 
@@ -19,7 +27,7 @@ Ensure you have [Python](https://www.python.org/) installed on your Windows mach
 ### 2. Initial Configuration
 1. Download the repository and navigate to the folder.
 2. Run `gelismis_secici.py` as **Administrator**.
-   * *Note: Admin rights are required for the script to automatically install NirCmd into the system directory.*
+   * *Note: Admin rights are required for the script to automatically install bağımlılıklar and NirCmd into the system directory.*
 3. Follow the interactive terminal prompts:
    * Select the **Audio Device** you want to target (e.g., `SteelSeries Sonar - Microphone`).
    * Select the **Application** you want to mute (e.g., `Discord.exe`).
@@ -34,13 +42,13 @@ Ensure you have [Python](https://www.python.org/) installed on your Windows mach
 
 ## 🛠️ How It Works (Technical Deep Dive)
 
-The core challenge with **SteelSeries Sonar** is its complex virtual routing. Standard audio libraries often fail to distinguish between virtual channels because they share the same process names. This tool bypasses those limitations using specialized logic:
+The core challenge with **SteelSeries Sonar** is its complex virtual routing. Standard audio libraries often fail to distinguish between virtual channels because they share the same process names. This tool bypasses those limitations:
 
 ### 1. GUID-Based Device Mapping
-Instead of relying on fragile "Friendly Names" (which can be duplicated), the tool uses **PowerShell Integration** to query the Windows Registry for unique **Endpoint GUIDs**. This ensures the script targets the exact virtual hardware ID assigned to Sonar channels with 100% accuracy.
+Instead of relying on fragile "Friendly Names," the tool uses **PowerShell Integration** to query the Windows Registry for unique **Endpoint GUIDs**. This ensures the script targets the exact virtual hardware ID assigned to Sonar channels with 100% accuracy.
 
 ### 2. Low-Level WASAPI Interaction
-We utilize **NirCmd** as a high-performance backend to interact directly with the **Windows Audio Session API (WASAPI)**. This allows us to manipulate individual application "streams" within a specific audio endpoint at the kernel level—a feat standard libraries cannot achieve.
+We utilize **NirCmd** as a high-performance backend to interact directly with the **Windows Audio Session API (WASAPI)**. This allows us to manipulate individual application "streams" within a specific audio endpoint at the kernel level.
 
 ### 3. Non-Persistent Execution & Ghost Mode
 To maintain a seamless experience, `startup.pyw` uses specific Windows API flags:
