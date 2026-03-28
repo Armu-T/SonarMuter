@@ -26,7 +26,7 @@ Ensure you have [Python](https://www.python.org/) installed on your Windows mach
 
 ### 2. Initial Configuration
 1. Download the repository and navigate to the folder.
-2. Run `gelismis_secici.py` as **Administrator**.
+2. Run `main.py` as **Administrator**.
    * *Note: Admin rights are required for the script to automatically install bağımlılıklar and NirCmd into the system directory.*
 3. Follow the interactive terminal prompts:
    * Select the **Audio Device** you want to target (e.g., `SteelSeries Sonar - Microphone`).
